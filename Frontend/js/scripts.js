@@ -39,7 +39,7 @@ async function fetchValidWords() {
         }
         let wordList = await response.json()
         console.log(wordList) // Get the word list text
-       ; // Parse the string as JSON
+            ; // Parse the string as JSON
         console.log(wordList.array)
         return wordList.array;
     } catch (error) {
@@ -65,6 +65,30 @@ function generateRandomString() {
 }
 
 
+async function postHighScore(word, highScore) {
+    try {
+        const response = await fetch('http://localhost:3000/dev/postHighScore', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ word, highScore }),
+        });
+
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+
+        const result = await response.json();
+        console.log(result);
+
+        return result; // You can return a response from the server if needed
+    } catch (error) {
+        // Handle any errors that occurred during the fetch
+        console.error('Fetch error:', error);
+        return { message: 'Error posting high score', error: error.message };
+    }
+}
 
 
 
