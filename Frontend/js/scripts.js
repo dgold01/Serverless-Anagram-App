@@ -2,12 +2,38 @@
     Add your game logic here
     Feel free to add other functions or files as needed
 */
+function isWordAcceptable(submittedWord,baseString){
+
+    let remaningLeterrs = baseString.split('')
+
+    for ( const letter of submittedWord){
+        const index = remaningLeterrs.indexOf(letter)
+
+        if(index === -1){
+            return false
+        }
+        else {
+            remaningLeterrs.splice(index,1);
+        }
+    }
+    
+}
+
+
+function fetchValidWords(){
+
+    
+}
+
+function calculateWordScore(){
+
+
+}
 
 
 
 
 function generateRandomString() {
-
     const possibleLetters = "abcdefghijklmnopqrstuvwxyz"; 
     const randomLength = Math.floor(Math.random() * (20 - 1 + 1)) + 1; 
     let randomString = "";
@@ -17,6 +43,7 @@ function generateRandomString() {
         randomString += possibleLetters[randomIndex];
     }
     return randomString;
+
 }
 
 
