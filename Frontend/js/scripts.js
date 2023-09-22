@@ -1,6 +1,5 @@
-
-
 let currentIndex = 0;
+
 /**
  * Check if a submitted word is acceptable based on available letters in baseString
  * and whether it exists in a valid word list.
@@ -10,38 +9,41 @@ let currentIndex = 0;
  * @timecomplexity O(n^2), where 'n' is the length of the submittedWord.
  */
 async function isWordAcceptable(submittedWord, baseString) {
-    let remaningLeterrs = baseString.split('')
+    let remainingLetters = baseString.split('');
 
     for (const letter of submittedWord) {
-        const index = remaningLeterrs.indexOf(letter)
+        const index = remainingLetters.indexOf(letter);
 
         if (index === -1) {
-            return false
-        }
-        else {
-            remaningLeterrs.splice(index, 1);
+            return false;
+        } else {
+            remainingLetters.splice(index, 1);
         }
     }
 
-    const wordList = await fetchValidWords()
-    console.log(wordList)
+    const wordList = await fetchValidWords();
+    console.log(wordList);
+
     if (wordList && !wordList.includes(submittedWord)) {
         return false;
     }
+
     return true;
 }
 
 async function fetchValidWords() {
     try {
         const response = await fetch('http://localhost:3000/dev/fetchWordList');
+
         if (!response.ok) {
             throw new Error('Network response was not ok');
         }
-        let wordList = await response.json()
+
+        const wordList = await response.json();
         return wordList.array;
     } catch (error) {
         console.error('Fetch error:', error);
-        return []; 
+        return [];
     }
 }
 
@@ -73,22 +75,22 @@ async function postHighScore(word, highScore) {
 
         const result = await response.json();
         return result;
-
     } catch (error) {
         console.error('Fetch error:', error);
         return { message: 'Error posting high score', error: error.message };
     }
 }
 
-// Need to keep track of sumbitted word so we are not repeating
+// Need to keep track of submitted word so we are not repeating
 const submittedWords = new Set();
 
 async function submitWord() {
     const word = document.getElementById("UserInput").value;
     const baseString = document.getElementById("BaseString").value;
-    const isWord = await isWordAcceptable(word, baseString)
+    const isWord = await isWordAcceptable(word, baseString);
+
     if (isWord) {
-        // Makes sure we are inputing the same word
+        // Make sure we are not inputting the same word
         if (!submittedWords.has(word)) {
             submittedWords.add(word);
             currentIndex++;
@@ -97,20 +99,21 @@ async function submitWord() {
             alert("Word already submitted!");
         }
     }
-
 }
 
 const highScores = [];
-const MAX_HIGH_SCORES = 10; 
+const MAX_HIGH_SCORES = 10;
 
 function addHighScore(word, score) {
     const entry = { word, score };
     // Insert new high score at the beginning
-    highScores.unshift(entry); 
+    highScores.unshift(entry);
+
     if (highScores.length > MAX_HIGH_SCORES) {
         // Remove the lowest score if there are more than 10 entries
-        highScores.pop(); 
+        highScores.pop();
     }
+
     updateHighScoresTable();
 }
 
@@ -118,6 +121,7 @@ function updateHighScoresTable() {
     const highScoresTable = document.getElementById("HighScoresTable");
     // Clear the table first
     highScoresTable.innerHTML = '<tr><th>Word</th><th>Score</th></tr>';
+
     for (const entry of highScores) {
         const row = highScoresTable.insertRow();
         const cell1 = row.insertCell(0);
@@ -126,6 +130,7 @@ function updateHighScoresTable() {
         cell2.innerHTML = entry.score;
     }
 }
+
 function getGreetingFromServer() {
     fetch("http://localhost:3000/hello")
         .then(function (response) {
