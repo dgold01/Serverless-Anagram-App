@@ -2,40 +2,60 @@
     Add your game logic here
     Feel free to add other functions or files as needed
 */
-function isWordAcceptable(submittedWord,baseString){
+
+
+let currentIndex = 0;
+
+async function isWordAcceptable(submittedWord, baseString) {
 
     let remaningLeterrs = baseString.split('')
 
-    for ( const letter of submittedWord){
+    for (const letter of submittedWord) {
         const index = remaningLeterrs.indexOf(letter)
 
-        if(index === -1){
+        if (index === -1) {
             return false
         }
         else {
-            remaningLeterrs.splice(index,1);
+            remaningLeterrs.splice(index, 1);
         }
     }
-    
+
+    const wordList = await fetchValidWords
+
+    if (wordList && !wordList.includes(submittedWord)) {
+        return false;
+    }
+
+    return true;
 }
 
 
-function fetchValidWords(){
+function fetchValidWords() {
+    fetch('https://code-test-resources.s3.eu-west-2.amazonaws.com/wordlist.txt')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.text(); // assuming the content is plain text
+        })
+        .then(wordListText => {
+            // Process the word list text here
+            const wordListArray = wordListText.split('\n')
+            return wordListArray
+        })
+        .catch(error => {
+            // Handle any errors that occurred during the fetch
+            console.error('Fetch error:', error);
+        });
 
-    
 }
-
-function calculateWordScore(){
-
-
-}
-
 
 
 
 function generateRandomString() {
-    const possibleLetters = "abcdefghijklmnopqrstuvwxyz"; 
-    const randomLength = Math.floor(Math.random() * (20 - 1 + 1)) + 1; 
+    const possibleLetters = "abcdefghijklmnopqrstuvwxyz";
+    const randomLength = Math.floor(Math.random() * (20 - 1 + 1)) + 1;
     let randomString = "";
 
     for (let i = 0; i < randomLength; i++) {
@@ -51,11 +71,14 @@ function generateRandomString() {
 
 
 function submitWord() {
-    // var word = document.getElementById("UserInput").value;
+    const word = document.getElementById("UserInput").value;
 
-    // ...
+    if (isWordAcceptable) {
+        currentIndex++
+        addHighScore(word, word.length, currentIndex);
+    }
 
-    // addHighScore(word, score, index);
+   
 }
 
 function addHighScore(word, score, index) {
