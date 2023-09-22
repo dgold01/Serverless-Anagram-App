@@ -24,8 +24,9 @@ provider:
 
 functions:
   hello:
-    handler: handler.hello
+    handler: handler.fetchWordList
     events:
       - http:
-          path: hello
+          path: fetchWordList
           method: get
+          cors: true

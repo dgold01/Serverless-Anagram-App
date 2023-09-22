@@ -7,6 +7,7 @@
 let currentIndex = 0;
 
 async function isWordAcceptable(submittedWord, baseString) {
+    console.log('test')
 
     let remaningLeterrs = baseString.split('')
 
@@ -21,8 +22,8 @@ async function isWordAcceptable(submittedWord, baseString) {
         }
     }
 
-    const wordList = await fetchValidWords
-
+    const wordList = await fetchValidWords()
+    console.log(wordList)
     if (wordList && !wordList.includes(submittedWord)) {
         return false;
     }
@@ -30,25 +31,22 @@ async function isWordAcceptable(submittedWord, baseString) {
     return true;
 }
 
-
-function fetchValidWords() {
-    fetch('https://code-test-resources.s3.eu-west-2.amazonaws.com/wordlist.txt')
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return response.text(); // assuming the content is plain text
-        })
-        .then(wordListText => {
-            // Process the word list text here
-            const wordListArray = wordListText.split('\n')
-            return wordListArray
-        })
-        .catch(error => {
-            // Handle any errors that occurred during the fetch
-            console.error('Fetch error:', error);
-        });
-
+async function fetchValidWords() {
+    try {
+        const response = await fetch('http://localhost:3000/dev/fetchWordList');
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        let wordList = await response.json()
+        console.log(wordList) // Get the word list text
+       ; // Parse the string as JSON
+        console.log(wordList.array)
+        return wordList.array;
+    } catch (error) {
+        // Handle any errors that occurred during the fetch
+        console.error('Fetch error:', error);
+        return []; // Return an empty array in case of an error
+    }
 }
 
 
@@ -70,15 +68,16 @@ function generateRandomString() {
 
 
 
-function submitWord() {
+async function submitWord() {
     const word = document.getElementById("UserInput").value;
-
-    if (isWordAcceptable) {
+    const baseString = document.getElementById("BaseString").value;
+    const isWord = await isWordAcceptable(word, baseString)
+    if (isWord) {
         currentIndex++
         addHighScore(word, word.length, currentIndex);
     }
 
-   
+
 }
 
 function addHighScore(word, score, index) {
