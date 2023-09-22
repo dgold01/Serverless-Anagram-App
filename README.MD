@@ -22,3 +22,9 @@ The application retrieves word lists from a serverless database. The database is
 
 When the application is deployed to AWS, it has the capability to post high scores to a DynamoDB database. The high scores are stored in DynamoDB, allowing you to track and view your achievements.
 
+## My Deployed Backend
+
+The serverless backend is currently deployed on my personal AWS account. Use these POST and GET URLs in your development
+
+GET: https://1dcdmz6ceb.execute-api.eu-north-1.amazonaws.com/dev/fetchWordList
+POST: https://1dcdmz6ceb.execute-api.eu-north-1.amazonaws.com/dev/storeHighScore

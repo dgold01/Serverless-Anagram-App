@@ -22,7 +22,7 @@ async function isWordAcceptable(submittedWord, baseString) {
     }
 
     const wordList = await fetchValidWords();
-    console.log(wordList);
+
 
     if (wordList && !wordList.includes(submittedWord)) {
         return false;
