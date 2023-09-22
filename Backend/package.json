@@ -1,0 +1,18 @@
+{
+  "name": "code-test-backend",
+  "version": "1.0.0",
+  "description": "Backend for code test",
+  "main": "handler.js",
+  "scripts": {
+    "test": "serverless-bundle test",
+    "start": "serverless offline start --reloadHandler"
+  },
+  "author": "FVR",
+  "devDependencies": {
+    "serverless": "3.33.0",
+    "serverless-bundle": "6.0.0",
+    "serverless-dotenv-plugin": "6.0.0",
+    "serverless-offline": "12.0.4"
+  },
+  "dependencies": {}
+}

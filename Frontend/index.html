@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>FVR Code Test - Anagram Game</title>
+    <meta name="description" content="Anagram Game">
+    <meta name="author" content="">
+    <link rel="stylesheet" href="css/styles.css?v=1.0">
+</head>
+
+<body>
+    <script src="js/scripts.js"></script>
+    <div id="Game">
+        <div class="flex-child" id="GameInterface">
+            <label>Base String</label>
+            <input id="BaseString" disabled/>
+            <label>User's word</label>
+            <input id="UserInput" />
+            <button onclick="submitWord()">Submit Word</button>
+        </div>
+        <div id="HighScores">
+            <table id="HighScoresTable">
+                <tr>
+                    <th>Word</th>
+                    <th>Score</th>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <script>
+        (function() {
+            document.getElementById("BaseString").value = generateRandomString();
+        })();
+    </script>
+</body>
+
+</html>
