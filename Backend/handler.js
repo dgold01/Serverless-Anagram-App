@@ -7,7 +7,7 @@ export const fetchWordList = async (event, context) => {
     }
 
     const wordListText = await response.text();
-    const wordListArwray = wordListText.split('\n');
+    const wordListArray = wordListText.split('\n');
 
     return {
       statusCode: 200,
@@ -34,6 +34,8 @@ export const fetchWordList = async (event, context) => {
 };
 
 
+const AWS = require('aws-sdk');
+
 export const storeHighScore = async (event, context) => {
 
   const db = new AWS.DynamoDB.DocumentClient();
@@ -45,24 +47,16 @@ export const storeHighScore = async (event, context) => {
     },
   };
   try {
-    await db.put(params).promise()
+    await db.put(params).promise();
     return {
       statusCode: 201,
       body: JSON.stringify({ message: 'Item inserted succesfully' }),
-    }
+    };
   }
   catch (error) {
     return {
       statusCode: 500,
       body: JSON.stringify({ message: 'Error inserting item', error }),
-    }
+    };
   }
-}
-
-
-
-
-
-
-
-}
+};

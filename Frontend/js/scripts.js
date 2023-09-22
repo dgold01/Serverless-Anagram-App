@@ -1,14 +1,15 @@
-/*
-    Add your game logic here
-    Feel free to add other functions or files as needed
-*/
 
 
 let currentIndex = 0;
-
+/**
+ * Check if a submitted word is acceptable based on available letters in baseString
+ * and whether it exists in a valid word list.
+ * @param {string} submittedWord - The word to be checked.
+ * @param {string} baseString - The available letters for forming the word.
+ * @returns {boolean} - True if the word is acceptable, false otherwise.
+ * @timecomplexity O(n^2), where 'n' is the length of the submittedWord.
+ */
 async function isWordAcceptable(submittedWord, baseString) {
-    console.log('test')
-
     let remaningLeterrs = baseString.split('')
 
     for (const letter of submittedWord) {
@@ -27,7 +28,6 @@ async function isWordAcceptable(submittedWord, baseString) {
     if (wordList && !wordList.includes(submittedWord)) {
         return false;
     }
-
     return true;
 }
 
@@ -38,18 +38,12 @@ async function fetchValidWords() {
             throw new Error('Network response was not ok');
         }
         let wordList = await response.json()
-        console.log(wordList) // Get the word list text
-            ; // Parse the string as JSON
-        console.log(wordList.array)
         return wordList.array;
     } catch (error) {
-        // Handle any errors that occurred during the fetch
         console.error('Fetch error:', error);
-        return []; // Return an empty array in case of an error
+        return []; 
     }
 }
-
-
 
 function generateRandomString() {
     const possibleLetters = "abcdefghijklmnopqrstuvwxyz";
@@ -61,9 +55,7 @@ function generateRandomString() {
         randomString += possibleLetters[randomIndex];
     }
     return randomString;
-
 }
-
 
 async function postHighScore(word, highScore) {
     try {
@@ -80,39 +72,60 @@ async function postHighScore(word, highScore) {
         }
 
         const result = await response.json();
-        console.log(result);
+        return result;
 
-        return result; // You can return a response from the server if needed
     } catch (error) {
-        // Handle any errors that occurred during the fetch
         console.error('Fetch error:', error);
         return { message: 'Error posting high score', error: error.message };
     }
 }
 
-
+// Need to keep track of sumbitted word so we are not repeating
+const submittedWords = new Set();
 
 async function submitWord() {
     const word = document.getElementById("UserInput").value;
     const baseString = document.getElementById("BaseString").value;
     const isWord = await isWordAcceptable(word, baseString)
     if (isWord) {
-        currentIndex++
-        addHighScore(word, word.length, currentIndex);
+        // Makes sure we are inputing the same word
+        if (!submittedWords.has(word)) {
+            submittedWords.add(word);
+            currentIndex++;
+            addHighScore(word, word.length);
+        } else {
+            alert("Word already submitted!");
+        }
     }
 
-
 }
 
-function addHighScore(word, score, index) {
-    var highScoresTable = document.getElementById("HighScoresTable");
-    var row = highScoresTable.insertRow(index);
-    var cell1 = row.insertCell(0);
-    var cell2 = row.insertCell(1);
-    cell1.innerHTML = word;
-    cell2.innerHTML = score;
+const highScores = [];
+const MAX_HIGH_SCORES = 10; 
+
+function addHighScore(word, score) {
+    const entry = { word, score };
+    // Insert new high score at the beginning
+    highScores.unshift(entry); 
+    if (highScores.length > MAX_HIGH_SCORES) {
+        // Remove the lowest score if there are more than 10 entries
+        highScores.pop(); 
+    }
+    updateHighScoresTable();
 }
 
+function updateHighScoresTable() {
+    const highScoresTable = document.getElementById("HighScoresTable");
+    // Clear the table first
+    highScoresTable.innerHTML = '<tr><th>Word</th><th>Score</th></tr>';
+    for (const entry of highScores) {
+        const row = highScoresTable.insertRow();
+        const cell1 = row.insertCell(0);
+        const cell2 = row.insertCell(1);
+        cell1.innerHTML = entry.word;
+        cell2.innerHTML = entry.score;
+    }
+}
 function getGreetingFromServer() {
     fetch("http://localhost:3000/hello")
         .then(function (response) {
