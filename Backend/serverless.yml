@@ -1,6 +1,6 @@
 service: code-test-backend
 
-# Create an optimized package for our functions 
+# Create an optimized package for our functions
 package:
   individually: true
 
@@ -29,7 +29,11 @@ functions:
       - http:
           path: fetchWordList
           method: get
-          cors: true
+          cors:
+            origin: "*"
+            headers:
+              - Content-Type
+            allowCredentials: true
   storeHighScore:
     role: DynamoDBFullAccessRole
     handler: handler.storeHighScore
@@ -37,9 +41,13 @@ functions:
       - http:
           path: storeHighScore
           method: post
-          cors: true
+          cors:
+            origin: "*"
+            headers:
+              - Content-Type
+            allowCredentials: true
 
-resources: 
+resources:
   Resources:
     DynamoDBFullAccessRole:
       Type: AWS::IAM::Role
@@ -77,4 +85,3 @@ resources:
         ProvisionedThroughput:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
-

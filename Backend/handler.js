@@ -12,6 +12,8 @@ export const fetchWordList = async (event, context) => {
     return {
       statusCode: 200,
       headers: {
+        "Access-Control-Allow-Origin": "http://localhost",
+        'Access-Control-Allow-Credentials': true,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
@@ -56,6 +58,11 @@ export const storeHighScore = async (event, context) => {
   catch (error) {
     return {
       statusCode: 500,
+      headers: {
+        "Access-Control-Allow-Origin": "http://localhost",
+        'Access-Control-Allow-Credentials': true,
+        'Content-Type': 'application/json',
+      },
       body: JSON.stringify({ message: 'Error inserting item', error }),
     };
   }
