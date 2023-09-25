@@ -33,6 +33,12 @@ functions:
             origin: "*"
             headers:
               - Content-Type
+              - X-Amz-Date
+              - Authorization
+              - X-Api-Key
+              - X-Amz-Security-Token
+              - X-Amz-User-Agent
+              - X-Amzn-Trace-Id
             allowCredentials: true
   storeHighScore:
     role: DynamoDBFullAccessRole
@@ -42,9 +48,15 @@ functions:
           path: storeHighScore
           method: post
           cors:
-            origin: "*"
+            origin: '*'
             headers:
               - Content-Type
+              - X-Amz-Date
+              - Authorization
+              - X-Api-Key
+              - X-Amz-Security-Token
+              - X-Amz-User-Agent
+              - X-Amzn-Trace-Id
             allowCredentials: true
 
 resources:

@@ -1,20 +1,22 @@
+const axios = require('axios');
+
 export const fetchWordList = async (event, context) => {
   try {
-    const response = await fetch('https://code-test-resources.s3.eu-west-2.amazonaws.com/wordlist.txt');
+    const response = await axios.get('https://code-test-resources.s3.eu-west-2.amazonaws.com/wordlist.txt');
 
-    if (!response.ok) {
-      throw new Error('Network response was not ok');
+
+    if (response.status !== 200) {
+      throw new Error(`Network response was not ok. Status: ${response.status}`);
     }
 
-    const wordListText = await response.text();
+    const wordListText = await response.data;
     const wordListArray = wordListText.split('\n');
 
     return {
       statusCode: 200,
       headers: {
-        "Access-Control-Allow-Origin": "http://localhost",
-        'Access-Control-Allow-Credentials': true,
         'Content-Type': 'application/json',
+        "Access-Control-Allow-Origin": "*",
       },
       body: JSON.stringify({
         array: wordListArray,
@@ -24,9 +26,10 @@ export const fetchWordList = async (event, context) => {
     console.error('Fetch error:', error);
 
     return {
-      statusCode: 500, // or any appropriate error status code
+      statusCode: 500,
       headers: {
         'Content-Type': 'application/json',
+        "Access-Control-Allow-Origin": "*",
       },
       body: JSON.stringify({
         error: 'Internal Server Error',

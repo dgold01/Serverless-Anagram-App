@@ -35,7 +35,9 @@ jspm_packages
 
 # Optional REPL history
 .node_repl_history
+
 .DS_Store
+Frontend/.DS_Store
 # vim
 .*.sw*
 Session.vim

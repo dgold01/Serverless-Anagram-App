@@ -33,7 +33,7 @@ async function isWordAcceptable(submittedWord, baseString) {
 
 async function fetchValidWords() {
     try {
-        const response = await fetch('http://localhost:3000/dev/fetchWordList');
+        const response = await fetch('https://1dcdmz6ceb.execute-api.eu-north-1.amazonaws.com/dev/fetchWordList');
 
         if (!response.ok) {
             throw new Error('Network response was not ok');
@@ -61,7 +61,7 @@ function generateRandomString() {
 
 async function postHighScore(word, highScore) {
     try {
-        const response = await fetch('http://localhost:3000/dev/postHighScore', {
+        const response = await fetch('https://1dcdmz6ceb.execute-api.eu-north-1.amazonaws.com/dev/storeHighScore', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
