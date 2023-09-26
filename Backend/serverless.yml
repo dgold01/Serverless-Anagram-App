@@ -25,6 +25,7 @@ provider:
 functions:
   fetchScores:
     handler: handler.fetchScores
+    role: DynamoDBFullAccessRole
     events:
       - http:
           path: fetchScores
