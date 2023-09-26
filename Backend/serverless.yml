@@ -23,6 +23,23 @@ provider:
   #  SAMPLE_ENV_VAR: ${env:SAMPLE_ENV_VAR}
 
 functions:
+  fetchScores:
+    handler: handler.fetchScores
+    events:
+      - http:
+          path: fetchScores
+          method: get
+          cors:
+            origin: "*"
+            headers:
+              - Content-Type
+              - X-Amz-Date
+              - Authorization
+              - X-Api-Key
+              - X-Amz-Security-Token
+              - X-Amz-User-Agent
+              - X-Amzn-Trace-Id
+            allowCredentials: true
   fetchWordList:
     handler: handler.fetchWordList
     events:

@@ -1,4 +1,5 @@
 const axios = require('axios');
+const AWS = require('aws-sdk');
 
 export const fetchWordList = async (event, context) => {
   try {
@@ -39,7 +40,48 @@ export const fetchWordList = async (event, context) => {
 };
 
 
-const AWS = require('aws-sdk');
+export const fetchScores = async (event, context) => {
+
+  const dynamodb = new AWS.DynamoDB.DocumentClient();
+
+
+  const tableName = 'highscoreTable';
+
+  // Define the parameters for the scan operation
+  const params = {
+    TableName: tableName,
+  };
+
+  try {
+    const data = await dynamodb.scan(params).promise();
+    const items = data.Items;
+
+    return {
+      statusCode: 200,
+      headers: {
+        'Content-Type': 'application/json',
+        "Access-Control-Allow-Origin": "*",
+      },
+      body: JSON.stringify({
+        objectArray: items,
+      }),
+    };
+  } catch (error) {
+    console.error('Fetch error:', error);
+
+    return {
+      statusCode: 500,
+      headers: {
+        'Content-Type': 'application/json',
+        "Access-Control-Allow-Origin": "*",
+      },
+      body: JSON.stringify({
+        error: 'Internal Server Error',
+      }),
+    };
+  }
+};
+
 
 export const storeHighScore = async (event, context) => {
 
@@ -58,7 +100,7 @@ export const storeHighScore = async (event, context) => {
     return {
       statusCode: 200,
       headers: {
-        "Access-Control-Allow-Headers" : "Content-Type",
+        "Access-Control-Allow-Headers": "Content-Type",
         'Content-Type': 'application/json',
         "Access-Control-Allow-Methods": "OPTIONS,POST,GET",
         "Access-Control-Allow-Origin": "*",
