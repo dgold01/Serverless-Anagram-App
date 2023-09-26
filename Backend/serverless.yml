@@ -25,7 +25,7 @@ provider:
 functions:
   fetchScores:
     handler: handler.fetchScores
-    role: DynamoDBFullAccessRole
+    role: arn:aws:iam::439975796198:role/LambdaDynamo
     events:
       - http:
           path: fetchScores
@@ -59,14 +59,14 @@ functions:
               - X-Amzn-Trace-Id
             allowCredentials: true
   storeHighScore:
-    role: DynamoDBFullAccessRole
+    role: arn:aws:iam::439975796198:role/LambdaDynamo
     handler: handler.storeHighScore
     events:
       - http:
           path: storeHighScore
           method: post
           cors:
-            origin: '*'
+            origin: "*"
             headers:
               - Content-Type
               - X-Amz-Date
@@ -79,29 +79,6 @@ functions:
 
 resources:
   Resources:
-    DynamoDBFullAccessRole:
-      Type: AWS::IAM::Role
-      Properties:
-        RoleName: DynamoDBFullAccessRole
-        AssumeRolePolicyDocument:
-          Version: "2012-10-17"
-          Statement:
-            - Effect: Allow
-              Principal:
-                Service:
-                  - lambda.amazonaws.com
-              Action:
-                - sts:AssumeRole
-        Policies:
-          - PolicyName: DynamoDBFullAccessPolicy
-            PolicyDocument:
-              Version: "2012-10-17"
-              Statement:
-                - Effect: Allow
-                  Action:
-                    - dynamodb:*
-                  Resource:
-                    - "arn:aws:dynamodb:eu-north-1:439975796198:table/calculationsTable"
     highscoreTable:
       Type: AWS::DynamoDB::Table
       Properties:
