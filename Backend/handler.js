@@ -91,7 +91,7 @@ export const storeHighScore = async (event, context) => {
     TableName: 'highscoreTable',
     Item: {
       word: requestBody.word,
-      data: requestBody.score
+      score: requestBody.word.length
     },
   };
 
