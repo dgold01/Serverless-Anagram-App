@@ -44,27 +44,38 @@ const AWS = require('aws-sdk');
 export const storeHighScore = async (event, context) => {
 
   const db = new AWS.DynamoDB.DocumentClient();
+  const requestBody = JSON.parse(event.body);
   const params = {
-    TableName: 'highScoreTable',
+    TableName: 'highscoreTable',
     Item: {
-      word: event.word,
-      data: event.score
+      word: requestBody.word,
+      data: requestBody.score
     },
   };
+
   try {
     await db.put(params).promise();
     return {
-      statusCode: 201,
+      statusCode: 200,
+      headers: {
+        "Access-Control-Allow-Headers" : "Content-Type",
+        'Content-Type': 'application/json',
+        "Access-Control-Allow-Methods": "OPTIONS,POST,GET",
+        "Access-Control-Allow-Origin": "*",
+        'Access-Control-Allow-Credentials': true
+      },
       body: JSON.stringify({ message: 'Item inserted succesfully' }),
     };
   }
   catch (error) {
+    console.log(error);
     return {
       statusCode: 500,
       headers: {
-        "Access-Control-Allow-Origin": "http://localhost",
-        'Access-Control-Allow-Credentials': true,
-        'Content-Type': 'application/json',
+        headers: {
+          'Content-Type': 'application/json',
+          "Access-Control-Allow-Origin": "*",
+        },
       },
       body: JSON.stringify({ message: 'Error inserting item', error }),
     };

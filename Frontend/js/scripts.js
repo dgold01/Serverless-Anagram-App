@@ -1,5 +1,6 @@
-let currentIndex = 0;
 
+
+let currentIndex = 0;
 /**
  * Check if a submitted word is acceptable based on available letters in baseString
  * and whether it exists in a valid word list.
@@ -63,9 +64,10 @@ async function postHighScore(word, highScore) {
     try {
         const response = await fetch('https://1dcdmz6ceb.execute-api.eu-north-1.amazonaws.com/dev/storeHighScore', {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
+            // headers: {
+            //     'Content-Type': 'application/json',
+            //     'Access-Control-Allow-Origin': '*',
+            // },
             body: JSON.stringify({ word, highScore }),
         });
 
@@ -95,6 +97,7 @@ async function submitWord() {
             submittedWords.add(word);
             currentIndex++;
             addHighScore(word, word.length);
+            postHighScore(word,word.length);
         } else {
             alert("Word already submitted!");
         }
