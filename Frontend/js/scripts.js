@@ -1,5 +1,12 @@
+let savedScores
+let highScores = []
 
-
+window.onload = async function () {
+    // Fetch scores when the page is loaded or refreshed
+    savedScores = await fetchScores();
+    highScores = highScores.length === 0 ? savedScores : highScores;
+    updateHighScoresTable();
+};
 let currentIndex = 0;
 /**
  * Check if a submitted word is acceptable based on available letters in baseString
@@ -30,6 +37,23 @@ async function isWordAcceptable(submittedWord, baseString) {
     }
 
     return true;
+}
+
+
+async function fetchScores() {
+    try {
+        const response = await fetch('https://1dcdmz6ceb.execute-api.eu-north-1.amazonaws.com/dev/fetchScores');
+
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+
+        const object = await response.json();
+        return object.objectArray;
+    } catch (error) {
+        console.error('Fetch error:', error);
+        return [];
+    }
 }
 
 async function fetchValidWords() {
@@ -64,10 +88,7 @@ async function postHighScore(word, highScore) {
     try {
         const response = await fetch('https://1dcdmz6ceb.execute-api.eu-north-1.amazonaws.com/dev/storeHighScore', {
             method: 'POST',
-            // headers: {
-            //     'Content-Type': 'application/json',
-            //     'Access-Control-Allow-Origin': '*',
-            // },
+
             body: JSON.stringify({ word, highScore }),
         });
 
@@ -97,14 +118,14 @@ async function submitWord() {
             submittedWords.add(word);
             currentIndex++;
             addHighScore(word, word.length);
-            postHighScore(word,word.length);
+            postHighScore(word, word.length);
         } else {
             alert("Word already submitted!");
         }
     }
 }
 
-const highScores = [];
+
 const MAX_HIGH_SCORES = 10;
 
 function addHighScore(word, score) {
@@ -116,11 +137,12 @@ function addHighScore(word, score) {
         // Remove the lowest score if there are more than 10 entries
         highScores.pop();
     }
-
     updateHighScoresTable();
 }
 
 function updateHighScoresTable() {
+    console.log(highScores)
+    console.log(savedScores)
     const highScoresTable = document.getElementById("HighScoresTable");
     // Clear the table first
     highScoresTable.innerHTML = '<tr><th>Word</th><th>Score</th></tr>';
