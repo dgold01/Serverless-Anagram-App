@@ -1,18 +1,13 @@
-const axios = require('axios');
+
 const AWS = require('aws-sdk');
+const axiosService = require('./axiosService');
 
 export const fetchWordList = async (event, context) => {
   try {
-    const response = await axios.get('https://code-test-resources.s3.eu-west-2.amazonaws.com/wordlist.txt');
 
-
-    if (response.status !== 200) {
-      throw new Error(`Network response was not ok. Status: ${response.status}`);
-    }
-
-    const wordListText = await response.data;
+    const wordListText = await axiosService.fetchData('https://code-test-resources.s3.eu-west-2.amazonaws.com/wordlist.txt');
     const wordListArray = wordListText.split('\n');
-
+    
     return {
       statusCode: 200,
       headers: {

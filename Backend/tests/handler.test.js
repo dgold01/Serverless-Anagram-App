@@ -1,18 +1,13 @@
-const axios = require('axios');
+const axiosService = require('../axiosService')
 const { fetchWordList, fetchScores, storeHighScore } = require('../handler');
-const AxiosMockAdapter = require('axios-mock-adapter');
 const AWS = require('aws-sdk-mock');
 
+jest.mock('./axiosService', () => ({
+    fetchData: jest.fn(), 
+  }));
+  
+
 describe('Handlers', () => {
-    let axiosMock;
-
-    beforeAll(() => {
-        axiosMock = new AxiosMockAdapter(axios);
-    });
-
-    afterAll(() => {
-        axiosMock.restore();
-    });
 
     afterEach(() => {
         AWS.restore();
@@ -21,7 +16,8 @@ describe('Handlers', () => {
     describe('fetchWordList', () => {
         it('should return word list when axios request is successful', async () => {
             const mockResponse = 'word1\nword2\nword3'; 
-            axiosMock.onGet('https://code-test-resources.s3.eu-west-2.amazonaws.com/wordlist.txt').reply(200, mockResponse);
+
+            axiosService.fetchData.mockResolvedValue('word1\nword2\nword3');
 
             const result = await fetchWordList({}, {});
 
@@ -32,7 +28,8 @@ describe('Handlers', () => {
         });
 
         it('should handle axios request error', async () => {
-            axiosMock.onGet('https://code-test-resources.s3.eu-west-2.amazonaws.com/wordlist.txt').reply(500);
+
+            axiosService.fetchData.mockRejectedValue(new Error('Internal Server Error'));
 
             const result = await fetchWordList({}, {});
 
