@@ -24,9 +24,10 @@ When the application is deployed to AWS, it has the capability to post high scor
 
 ## My Deployed Backend
 
-The serverless backend is currently deployed on my personal AWS account. Use these POST and GET URLs in your development
+The serverless backend is currently deployed on my personal AWS account. Use these URLs in your development
 
-GET: https://1dcdmz6ceb.execute-api.eu-north-1.amazonaws.com/dev/fetchWordList
-
+Fetch list of valid words: https://1dcdmz6ceb.execute-api.eu-north-1.amazonaws.com/dev/fetchWordList
 <br>
-POST: https://1dcdmz6ceb.execute-api.eu-north-1.amazonaws.com/dev/storeHighScore
+Save score to database : https://1dcdmz6ceb.execute-api.eu-north-1.amazonaws.com/dev/storeHighScore
+<br>
+Retrieve scores from database: https://1dcdmz6ceb.execute-api.eu-north-1.amazonaws.com/dev/fetchScores
