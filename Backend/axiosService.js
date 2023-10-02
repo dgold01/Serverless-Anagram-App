@@ -1,6 +1,6 @@
 const axios = require('axios');
 
-async function fetchData(url) {
+export async function fetchData(url) {
     try {
         const response = await axios.get(url);
 
@@ -14,7 +14,3 @@ async function fetchData(url) {
         throw error;
     }
 }
-
-module.exports = {
-    fetchData,
-};

@@ -1,13 +1,13 @@
 
 const AWS = require('aws-sdk');
-const axiosService = require('./axiosService');
+import {fetchData} from './axiosService';
 
 export const fetchWordList = async (event, context) => {
   try {
 
-    const wordListText = await axiosService.fetchData('https://code-test-resources.s3.eu-west-2.amazonaws.com/wordlist.txt');
+    const wordListText = await fetchData('https://code-test-resources.s3.eu-west-2.amazonaws.com/wordlist.txt');
     const wordListArray = wordListText.split('\n');
-    
+
     return {
       statusCode: 200,
       headers: {
@@ -101,7 +101,7 @@ export const storeHighScore = async (event, context) => {
         "Access-Control-Allow-Origin": "*",
         'Access-Control-Allow-Credentials': true
       },
-      body: JSON.stringify({ message: 'Item inserted succesfully' }),
+      body: JSON.stringify({ message: 'Item inserted successfully' }),
     };
   }
   catch (error) {
